@@ -24,7 +24,7 @@ Air pollution is one of the most important environmental health risks in large c
 | Records | 26,305 hourly rows · 1,097 calendar days |
 | Pollutants | PM10, PM2.5, SO2, NO2 (µg/m³) |
 
-The raw data file is not stored in this repository. See [`data/README.md`](data/README.md) for how to download it.
+The raw data file is included in [`data/`](data/) exactly as downloaded (publicly available on the SİM portal). See [`data/README.md`](data/README.md) for details.
 
 ## Methodology
 
@@ -66,15 +66,22 @@ In this first experiment, Ridge regression did not beat the simple baseline for 
 ## Repository structure
 
 ```
-├── data/        how to obtain the raw data (data files are not committed)
+├── data/        raw hourly data (Excel) and data notes
 ├── docs/        flowchart, proposal and presentation
 ├── notebooks/   Colab notebooks (EDA, forecasting)
 └── requirements.txt
 ```
 
+## Notebooks
+
+| Notebook | Content | Open |
+|---|---|---|
+| [`notebooks/01_eda.ipynb`](notebooks/01_eda.ipynb) | Cleaning, quality control and exploratory data analysis | [Open in Colab](https://colab.research.google.com/github/maliksonmez/arnavutkoy-air-quality-forecast/blob/main/notebooks/01_eda.ipynb) |
+| [`notebooks/02_forecast_baseline_ridge.ipynb`](notebooks/02_forecast_baseline_ridge.ipynb) | Daily aggregation, lag features, baseline vs. Ridge | [Open in Colab](https://colab.research.google.com/github/maliksonmez/arnavutkoy-air-quality-forecast/blob/main/notebooks/02_forecast_baseline_ridge.ipynb) |
+
 ## How to run
 
-Open the notebooks in Google Colab, then upload the Excel file from the SİM portal when the notebook asks for it.
+Open a notebook in Google Colab with the links above, run the cells in order, and upload `data/arnavutkoy_hourly_2023-09-16_2026-09-16.xlsx` when the notebook asks for it.
 
 ## References
 
