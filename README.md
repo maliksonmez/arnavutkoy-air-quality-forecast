@@ -10,15 +10,24 @@ Harun Bazancir · Ata Ali Sarımaden · Ömer Malik Sönmez · Khadıja Huseynov
 
 Air pollution is one of the most important environmental health risks in large cities. This project builds a machine-learning tool that forecasts **tomorrow's daily concentrations of PM10, PM2.5, SO2 and NO2** at the Arnavutköy (Istanbul) air quality monitoring station, and compares them with the **WHO 24-hour air quality guideline levels**.
 
-- **SDG link:** SDG 11 — Sustainable Cities and Communities
+- **SDG link:** SDG 11.6 — reduce the environmental impact of cities, with special attention to air quality (indicator 11.6.2) — primary; SDG 3.9 — reduce illnesses and deaths from air pollution (indicator 3.9.1) — secondary [1, 7]
 - **Target users:** residents of Arnavutköy/Istanbul and sensitive groups (children, the elderly, people with respiratory or heart conditions), and local decision-makers
 - **Final product (planned):** a Streamlit web app showing tomorrow's forecast, an alert level, historical trends and an explanation of each forecast
+
+### WHO 2021 24-hour guideline levels [1]
+
+| Pollutant | PM2.5 | PM10 | NO2 | SO2 |
+|---|---:|---:|---:|---:|
+| Guideline (µg/m³, 24-hour mean) | 15 | 45 | 25 | 40 |
+| Valid days above the guideline at Arnavutköy | 36% | 13% | 36% | 0% |
+
+Air pollution is a frequent problem at this station: the daily mean exceeded the WHO guideline on about a third of valid days for PM2.5 and NO2. Studies in Istanbul show that traffic is a dominant urban source [3], that black carbon follows NO2 with rush-hour peaks [4], and that meteorology strongly affects particle levels [5].
 
 ## Data
 
 | | |
 |---|---|
-| Source | Ministry of Environment, Urbanisation and Climate Change — SİM station data download ([sim.csb.gov.tr](https://sim.csb.gov.tr/STN/STN_Report/StationDataDownloadNew)) |
+| Source | Ministry of Environment, Urbanisation and Climate Change — SİM station data download ([sim.csb.gov.tr](https://sim.csb.gov.tr/STN/STN_Report/StationDataDownloadNew)) [6] |
 | Station | İstanbul – Arnavutköy |
 | Period | 16.09.2023 – 16.09.2026 (hourly) |
 | Records | 26,305 hourly rows · 1,097 calendar days |
@@ -37,7 +46,7 @@ The raw data file is included in [`data/`](data/) exactly as downloaded (publicl
    - Target: next day's daily median for each pollutant
    - Inputs: the previous 7 days of all 4 pollutants (28 lag features)
    - Chronological split: ~60% training · ~15% validation · 25% test (test period not used yet; no shuffling, to avoid leakage)
-   - Models: **baseline** ("tomorrow = today") vs. **Ridge regression**
+   - Models: **baseline** ("tomorrow = today") vs. **Ridge regression**, following the baseline-first approach in [2]
    - Metric: **MAE** (mean absolute error, µg/m³)
 
 ## Assignment 1 results (validation period, 07.07–17.12.2025)
@@ -85,5 +94,10 @@ Open a notebook in Google Colab with the links above, run the cells in order, an
 
 ## References
 
-- Jalali, M. W., Saidi, B., Farahmand, H., Rezvan Panah, M. A., & Saruhan, E. N. (2025). Scalable AI-driven air quality forecasting and classification for public health applications. *Discover Atmosphere, 3*, 25. https://doi.org/10.1007/s44292-025-00052-8
-- World Health Organization. (2021). *WHO global air quality guidelines: Particulate matter (PM2.5 and PM10), ozone, nitrogen dioxide, sulfur dioxide and carbon monoxide.* Geneva: WHO. https://iris.who.int/handle/10665/345329
+1. World Health Organization (2021). *WHO global air quality guidelines: particulate matter (PM2.5 and PM10), ozone, nitrogen dioxide, sulfur dioxide and carbon monoxide.* Geneva: WHO. https://iris.who.int/handle/10665/345329
+2. Jalali, M. W., Saidi, B., Farahmand, H., Rezvan Panah, M. A., & Saruhan, E. N. (2025). Scalable AI-driven air quality forecasting and classification for public health applications. *Discover Atmosphere, 3*, 25. https://doi.org/10.1007/s44292-025-00052-8
+3. Yavuz, E., Balkanlı, N. G. N., Saral, A., & Kuzu, S. L. High-resolution CFD modelling of traffic-related air pollutant dispersion in an urban area of Istanbul, Türkiye.
+4. Kuzu, S. L., Yavuz, E., Akyüz, E., Saral, A., Akkoyunlu, B. O., Özdemir, H., Demir, G., & Ünal, A. Black carbon and size-segregated elemental carbon, organic carbon compositions in a megacity: a case study for Istanbul. *Air Quality, Atmosphere & Health.*
+5. Kuzu, S. L., & Saral, A. (2017). The effect of meteorological conditions on aerosol size distribution in Istanbul. *Air Quality, Atmosphere & Health, 10*(8), 1029–1038.
+6. Republic of Türkiye Ministry of Environment, Urbanisation and Climate Change, Continuous Monitoring Centre (SİM). Station data download, İstanbul–Arnavutköy, 16.09.2023–16.09.2026 (accessed 16 October 2026). https://sim.csb.gov.tr/STN/STN_Report/StationDataDownloadNew
+7. World Health Organization. Air quality, energy and health — SDG indicators 3.9.1 and 11.6.2. https://www.who.int/teams/environment-climate-change-and-health/air-quality-energy-and-health/policy-progress/sustainable-development-goals-air-pollution
