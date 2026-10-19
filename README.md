@@ -13,6 +13,7 @@ Air pollution is one of the most important environmental health risks in large c
 - **SDG link:** SDG 11.6 — reduce the environmental impact of cities, with special attention to air quality (indicator 11.6.2) — primary; SDG 3.9 — reduce illnesses and deaths from air pollution (indicator 3.9.1) — secondary [1, 7]
 - **Target users:** residents of Arnavutköy/Istanbul and sensitive groups (children, the elderly, people with respiratory or heart conditions), and local decision-makers
 - **Final product (planned):** a Streamlit web app showing tomorrow's forecast, an alert level, historical trends and an explanation of each forecast
+- **Project proposal (Assignment 1):** [docs/bazancir_sarimaden_sonmez_huseynova_coskun.pdf](docs/bazancir_sarimaden_sonmez_huseynova_coskun.pdf)
 
 ### WHO 2021 24-hour guideline levels [1]
 
@@ -76,7 +77,7 @@ In this first experiment, Ridge regression did not beat the simple baseline for 
 
 ```
 ├── data/        raw hourly data (Excel) and data notes
-├── docs/        flowchart, proposal and presentation
+├── docs/        flowchart and project proposal (PDF)
 ├── notebooks/   Colab notebooks (EDA, forecasting)
 └── requirements.txt
 ```
