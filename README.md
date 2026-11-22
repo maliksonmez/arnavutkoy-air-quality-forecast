@@ -13,6 +13,7 @@ Air pollution is one of the most important environmental health risks in large c
 - **SDG link:** SDG 11.6 — urban air quality (indicator 11.6.2) — primary; SDG 3.9 — illness and death from air pollution (indicator 3.9.1) — secondary [1, 7]
 - **Target users:** residents of Arnavutköy/Istanbul and sensitive groups (children, older adults, people with respiratory or heart conditions), and local decision-makers
 - **Final product (planned):** a Streamlit web app with tomorrow's forecast, a WHO-based alert, dust and wind context, historical trends and an explanation of each forecast
+- **Assignment 2 report:** [`docs/bazancir_sarimaden_sonmez_huseynova_coskun_assignment2.pdf`](docs/bazancir_sarimaden_sonmez_huseynova_coskun_assignment2.pdf) · notebooks [`06`](notebooks/06_cams_dayahead_download.ipynb), [`07`](notebooks/07_model_comparison_alerts.ipynb)
 - **Project proposal:** [updated after feedback](docs/updated_bazancir_sarimaden_sonmez_huseynova_coskun.pdf) · [original submission](docs/bazancir_sarimaden_sonmez_huseynova_coskun.pdf) (its flowchart: [`docs/flowchart_v1.png`](docs/flowchart_v1.png))
 
 ## What changed after feedback (Assignment 1, revised)
@@ -30,7 +31,24 @@ The instructor's feedback was that the model only saw the station's own history 
 
 Two data issues were also resolved along the way: SİM timestamps end in `:00:56` and are now floored to the hour before merging, and the **time zone is verified** (station–CAMS correlation peaks at a 0-hour shift).
 
-## Key findings
+## Assignment 2 — Model exploration and results
+
+- **Models:** persistence and raw CAMS (baselines) vs. **Ridge, Random Forest and XGBoost** that correct CAMS with station data and weather. Hyper-parameters by 5-fold `TimeSeriesSplit` on training data; model type chosen on validation; the **test period (18.12.2025–16.09.2026) was used once**, after re-fitting on train + validation.
+- **Real day-ahead CAMS:** on all validation/test days the CAMS value for the target day is the forecast actually issued the day before (Copernicus ADS, run 00 UTC, lead 21–44 h; [`06`](notebooks/06_cams_dayahead_download.ipynb)). Test MAE changed by < 0.1 µg/m³ compared with the Open-Meteo archive.
+- **Alerts:** "tomorrow's daily mean > WHO 24-h guideline" evaluated with precision, recall, F1 and confusion matrices (SO2 never exceeds its guideline and is skipped).
+
+Test period (selected model = Ridge for all pollutants):
+
+| Pollutant | MAE persistence | MAE raw CAMS | MAE Ridge | MAE RF | MAE XGBoost | Alert P / R / F1 (Ridge) | Alert F1 persistence |
+|---|---|---|---|---|---|---|---|
+| PM10 | 9.56 | 13.02 | **6.42** | 6.41 | 6.42 | 0.77 / 0.57 / 0.66 | 0.52 |
+| PM2.5 | 2.58 | 4.79 | **1.94** | 1.92 | 1.97 | 0.70 / 0.70 / 0.70 | 0.61 |
+| NO2 | 7.50 | 10.02 | **6.63** | 8.00 | 7.79 | 0.67 / 0.83 / 0.74 | 0.66 |
+| SO2 | 1.15 | 4.86 | **1.11** | 1.18 | 1.21 | – | – |
+
+Unexpected finding: in May–August 2026 station NO2 fell to ~9 µg/m³, far below earlier years, and the NO2 model over-predicts (distribution shift → rolling re-training in A3). Figures: [`docs/figures_a2/`](docs/figures_a2/).
+
+## Key findings (Assignment 1, revised)
 
 **1. CAMS follows the day-to-day changes but underestimates local levels.** Daily means, study period:
 
@@ -111,8 +129,8 @@ See [`data/README.md`](data/README.md) for column descriptions.
 
 ## Roadmap
 
-- **Assignment 2:** genuine day-ahead CAMS evaluation; Random Forest and XGBoost; walk-forward validation; neighbouring stations (e.g. Başakşehir, Sultangazi); İBB traffic density for NO2; a simple end-to-end Streamlit tool.
-- **Assignment 3:** final model with one check on the held-out test period, Streamlit app with WHO-based alerts, dust and wind context and SHAP explanations, Docker container and cloud deployment; Sentinel-5P NO2 (GIS week).
+- **Assignment 2 (done):** genuine day-ahead CAMS evaluation; Random Forest and XGBoost vs. Ridge; RMSE; WHO alert evaluation; one-time test-period evaluation.
+- **Assignment 3:** final evaluation on new, unseen data (17.09.2026 onwards), rolling re-training, neighbouring stations (e.g. Başakşehir, Sultangazi), İBB traffic density for NO2, Streamlit app with WHO-based alerts, dust and wind context and SHAP explanations, Docker container and cloud deployment; Sentinel-5P NO2 (GIS week).
 
 ## Repository structure
 
@@ -121,7 +139,7 @@ See [`data/README.md`](data/README.md) for column descriptions.
 │   ├── arnavutkoy_hourly_2023-09-16_2026-09-16.xlsx   raw station data
 │   └── processed/                                      station + weather + CAMS, hourly and daily
 ├── docs/        flowchart, figures, proposals (original and updated)
-├── notebooks/   Colab notebooks 01–05
+├── notebooks/   Colab notebooks 01–07
 └── requirements.txt
 ```
 
@@ -134,10 +152,12 @@ See [`data/README.md`](data/README.md) for column descriptions.
 | [`03_external_data`](notebooks/03_external_data.ipynb) | Downloads weather and CAMS from Open-Meteo, merges with station data, builds `data/processed/` | [Colab](https://colab.research.google.com/github/maliksonmez/arnavutkoy-air-quality-forecast/blob/main/notebooks/03_external_data.ipynb) |
 | [`04_external_eda`](notebooks/04_external_eda.ipynb) | CAMS vs. station, time-zone check, wind sectors and airport, Saharan dust | [Colab](https://colab.research.google.com/github/maliksonmez/arnavutkoy-air-quality-forecast/blob/main/notebooks/04_external_eda.ipynb) |
 | [`05_cams_correction`](notebooks/05_cams_correction.ipynb) | CAMS correction experiment (E1, E2) vs. persistence and raw CAMS | [Colab](https://colab.research.google.com/github/maliksonmez/arnavutkoy-air-quality-forecast/blob/main/notebooks/05_cams_correction.ipynb) |
+| [`06_cams_dayahead_download`](notebooks/06_cams_dayahead_download.ipynb) | Downloads the CAMS forecasts really issued the day before from Copernicus ADS (needs a free ADS key) → `data/processed/cams_dayahead_daily.csv` | [Colab](https://colab.research.google.com/github/maliksonmez/arnavutkoy-air-quality-forecast/blob/main/notebooks/06_cams_dayahead_download.ipynb) |
+| [`07_model_comparison_alerts`](notebooks/07_model_comparison_alerts.ipynb) | Assignment 2: Ridge vs. Random Forest vs. XGBoost, MAE/RMSE, one-time test evaluation, WHO alert precision/recall/F1 | [Colab](https://colab.research.google.com/github/maliksonmez/arnavutkoy-air-quality-forecast/blob/main/notebooks/07_model_comparison_alerts.ipynb) |
 
 ## How to run
 
-Open a notebook in Google Colab with the links above and choose *Runtime → Run all*. Notebooks 03–05 read their data directly from this repository; no upload or API key is needed. Notebooks 01–02 ask you to upload the raw Excel file from `data/`.
+Open a notebook in Google Colab with the links above and choose *Runtime → Run all*. Notebooks 03–05 and 07 read their data directly from this repository; no upload or API key is needed. Notebook 06 needs a free Copernicus ADS API key. Notebooks 01–02 ask you to upload the raw Excel file from `data/`.
 
 ## References
 
