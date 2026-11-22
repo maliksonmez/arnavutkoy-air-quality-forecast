@@ -1,0 +1,9 @@
+Pollutant,Period,Days,Persistence MAE,Raw CAMS MAE,Ridge MAE,RF MAE,XGB MAE,Selected,Selected RMSE,Persistence RMSE,Gain vs persistence (MAE %)
+PM10,Validation,144/148,7.62,8.72,5.04,5.36,5.2,Ridge,7.22,11.5,33.79
+PM10,Test,261/265,9.56,12.89,6.45,6.48,6.51,Ridge,10.26,15.24,32.59
+PM2.5,Validation,147/150,2.23,3.26,1.96,2.51,2.3,Ridge,2.71,3.33,11.8
+PM2.5,Test,261/265,2.58,4.73,1.92,1.93,1.99,Ridge,2.66,3.82,25.53
+NO2,Validation,129/134,9.89,13.14,5.48,6.5,6.49,Ridge,7.48,14.85,44.61
+NO2,Test,264/267,7.5,9.97,6.55,7.66,7.59,Ridge,8.48,11.34,12.62
+SO2,Validation,111/118,1.39,5.2,1.65,2.03,2.37,Ridge,2.21,2.04,-19.33
+SO2,Test,263/267,1.15,4.8,1.11,1.18,1.22,Ridge,1.58,1.65,3.44
